@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { getAll, getById } from './api/phone'
-import Basket from './Basket'
-import Filter from './Filter'
-import Catalog from './Catalog'
+import Basket from './components/Basket'
+import Filter from './components/Filter'
+import Catalog from './components/Catalog'
+import Viewer from './components/Viewer'
 
 import './App.css';
 
@@ -17,7 +18,19 @@ class App extends React.Component {
       selectedPhone: null,
       basketItems: [],
     };
+    this.addItem = this.addItem.bind(this);
   }
+
+  addItem(phoneId) {
+    this.setState(prevState => {
+      return {
+      basketItems: [
+        ...prevState.basketItems,
+        phoneId
+      ]
+    }
+    });
+  };
 
   render() {
     return (
@@ -26,7 +39,7 @@ class App extends React.Component {
           <div className="row">
             <div className="col-md-2">
               <Filter />
-              <Basket />
+              <Basket items={this.state.basketItems}/>
             </div>
 
             <div className="col-md-10">
@@ -46,6 +59,9 @@ class App extends React.Component {
                     this.setState({
                       selectedPhone: getById(phoneId),
                     });
+                  }}
+                  addItem={(phoneId) => {
+                    this.addItem(phoneId);
                   }}
                 />
               ) }
